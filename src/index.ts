@@ -1,4 +1,4 @@
-import { Class_Example, Employee, car } from "./Models/Location";
+import { Class_Example} from "./Models/Location";
 
 
 interface Building {
@@ -34,7 +34,7 @@ const watchTower: Location = {
     npmc: [],
     connectedAreas: [],
     interactables: [],
-  };
+};
 
  const watchTowerEntrance: Area = {
     name: "Watch Tower Entrance",
@@ -53,6 +53,10 @@ const watchTowerBuilding: Building = {
 }
 
 
+const tavern = {
+    name: ""
+}
+
 console.log(watchTowerBuilding)
 
 console.log(watchTowerEntrance)
@@ -62,7 +66,7 @@ console.log(watchTower)
 
 
 
-const myCar = new car ("Tpyota", 1234,4,"Regular")
+// const myCar = new car ("Tpyota", 1234,4,"Regular")
 
-console.log(myCar)
+// console.log(myCar)
 
