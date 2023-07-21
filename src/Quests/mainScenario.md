@@ -1,13 +1,12 @@
 let progress = 0
 
 switch (progress) {
-case 0:
+
+    case 0:
 
      You are a Traveler from a far distant land. You have been traveling for quite some time in search for a stone that has been said to withhold infinite power. This stone can be the potential solution for your kind back home that are dying from famine and starvation, if you are succesfull you will be seen as a savior of your village and stories will be written about your jorney. The stone works from the creative mind of the beholder, anything you can think of can be made possible as long as you hold this stone and are strong enough to withstand its power. While on your Quest, you stumble upon a small town. Tired from your treck, you decided to pay the town a visit. A familiar aura fills this town, welcoming you with warmth. But not all seems right as you start to ask questions. You hope someone in this town has more information on where to find the stone and hopefully lead you to the right direction.
 
      go to town, talk to tavern inhabitants, they will speak about a recent goblin problem they have been dealing with, no one has info on the stone but maybe the mystical creature of the forest might have some information, however she lives deep within the forest, the same forest that has been invaded by a recent goblin clan that moved in.
-
-
 
 talk to alex, he is one of the npcs in the tavern, he will tell you the town is in trouble becaues a nearby goblin camp was established in the forest, you have the option to help out. if you do you progress the story. he gives you your main quest
 
