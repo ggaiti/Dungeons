@@ -35,5 +35,5 @@ export const goblinLeader = {
       // he steals a potion from you if you have one and uses it on himself
     },
   ],
-  area: //Goblin Camp,
+  area: "", //Goblin Camp
 };
