@@ -33,14 +33,6 @@ class Person extends Instance {
   }
 }
 
-// Person obj => {
-//  info: {
-//     name: "Alex",
-//     message: "Hello Im alex",
-//     class: "Person",
-//  }
-// age: 23
-// }
 
 // Types of items
   // consumables
@@ -62,7 +54,6 @@ class Item extends Instance {
 }
 
 class Consumables extends Item {
-
   constructor(item: item) {
     super(item)
   }
