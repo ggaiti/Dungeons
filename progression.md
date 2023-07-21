@@ -58,4 +58,4 @@ _second phase king, true form_
 
 once you defeat the kind he repeats how its not possible and that the stone is supposed to grant him unlimited power. he becomes so unstable by the shere power of the stone that he rises to the sky and implodes. the blast was so powerful it was able to be heard across the land and so blindly that everyone everywhere was able to see the brightness of the explosion. the stone falls to the ground in front of you. finally your quest is over as you grab the stone and store it in your pouch, you use it to help all those places you visited and finally travel back home. you use it on the your land so crops are able to blossom no matter the season, and all diseases are cured by the water flowing in the rivers. you become the savior in your village and now that your quest is over, you do destroy the stone so nobody can ever use its powers for the wrong reasons. securing the future of your village and the whole world.
 
-_quest complete_
+**Quest Complete**
