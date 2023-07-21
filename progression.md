@@ -10,7 +10,7 @@ after you talk to the dryad, she only knows little information about the stone b
 
 _go to the caves and figure out what is lurking about_
 
-you defeat the cursed druid, he tells you a great wizard cursed him and needs you to convince him to revert his curse, he was asked by a group of men in armor to retrieve a book from his tower and but wasnt given any details as to why they needed the book, however they promised him that his bounty will be forgiven if he suceeds. He wont bother the wizard if he gets turned back to normal and says he just wants to live peaceful life in the wilderner. He knows about someone that potentially can lead you to the stone if you decide to help him out.
+you defeat the cursed druid, he tells you a great wizard cursed him and needs you to convince him to revert his curse, he was asked by a group of men in armor to retrieve a book from his tower but wasnt given any details as to why they needed the book, however they promised him that his bounty will be forgiven if he suceeds. He wont bother the wizard if he gets turned back to normal and says he just wants to live peaceful life in the wilderner. He knows about someone that potentially can lead you to the stone if you decide to help him out.
 
 _go to the watchtower to "talk" to the ArchMage_
 
