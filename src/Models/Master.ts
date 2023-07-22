@@ -1,14 +1,77 @@
-interface intanceInfo {
+import prompts from "prompts";
+import argv from "yargs";
+import { watchTower } from "../Locations/WatchTower/watchTower";
+prompts.override(argv);
+
+interface player {
   name: string;
-  message: string;
-  class: string;
-  description?: string;
+  location: Function;
 }
 
-class Instance {
+let PLAYER: player = {
+  name: "ALEX",
+  location: () => {},
+};
+
+interface intanceInfo {
+  class: string;
+  name: string;
+  message: string;
+  description?: string;
+  preRequisites?: Function;
+}
+
+interface choice {
+  title: string; //choice text
+  description?: string; // dsiplayed next to title
+  value: Function;
+  hidden?: boolean;
+}
+
+interface menu {
+  class: string;
+  name: string;
+  message: string;
+  menuOptions: Function;
+}
+
+interface map {
+  class: string;
+  name: string;
+  message: string;
+  locations: Function;
+}
+
+const worldMap: map = {
+  class: "Map",
+  name: "World Map",
+  message: "World Map",
+  locations: () => [watchTower],
+};
+
+const startMenu: menu = {
+  class: "Menu",
+  name: "Start Menu",
+  message: "Start Menu",
+  menuOptions: () => [worldMap],
+};
+
+const createInfo = (obj: any): intanceInfo => {
+  return {
+    class: obj.class,
+    name: obj.name,
+    message: obj.message,
+    description: obj.description,
+  };
+};
+
+abstract class Instance {
   info: intanceInfo;
-  constructor(info: intanceInfo) {
+  menu: choice[] = [];
+  currentObj: object = {};
+  constructor(info: intanceInfo, obj: object) {
     this.info = info;
+    this.currentObj = obj;
   }
   getInfo() {
     return this.info;
@@ -16,59 +79,228 @@ class Instance {
   getClass() {
     return this.info.class;
   }
-}
 
+  updatePlayer() {
+    PLAYER.location = () => this.currentObj;
+    console.log(this);
+    console.log(PLAYER.location());
+  }
 
-class Person extends Instance {
-  age: number;
-  constructor(person: person) {
-    const info: intanceInfo = {
-      name: person.name,
-      message: person.message,
-      class: person.class,
-    };
-    super(info);
+  loadNpc() {}
+  loadItem() {}
 
-    this.age = person.age;
+  createChoices(array: any[]) {
+    console.log("CREATING CHOICES");
+    if (!this.menu) this.menu = [];
+    array?.forEach((obj) => {
+      this.menu?.push({
+        title: obj.name,
+        value: () => obj,
+      });
+    });
+    this.menu.push({
+      title: "Start Menu",
+      value: () => startMenu,
+    });
+    // console.log(this.menu)
+  }
+
+  async displayOptions(choices: choice[]) {
+    const response = await prompts([
+      {
+        type: "select",
+        name: "choice",
+        message: this.info.message,
+        choices: choices,
+      },
+    ]);
+    this.updatePlayer();
+    console.log("CHOICE");
+    generateObj(response.choice());
   }
 }
 
+class Menu extends Instance {
+  menuOptions: [];
+  constructor(menu: menu) {
+    const info = createInfo(menu);
+    super(info, menu);
+    this.menuOptions = menu.menuOptions();
+  }
+
+  load() {
+    console.log("LOAD MENU");
+    if (this.menuOptions) this.createChoices(this.menuOptions);
+    this.menu.push({
+      title: "Close " + this.info.name,
+      value: () => PLAYER.location(),
+    });
+    if (this.menu === undefined) {
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.info);
+    } else {
+      this.displayOptions(this.menu);
+    }
+  }
+}
 
 // Types of items
-  // consumables
-  // Equipables
-  // Quest items
+// consumables
+// Equipables
+// Quest items
 
 class Item extends Instance {
   stats?: stats;
   constructor(item: item) {
-    const info: intanceInfo = {
-      name: item.name,
-      message: item.message,
-      class: item.class,
-      description: item.description,
-    };
-    super(info);
+    const info = createInfo(item);
+    super(info, item);
     this.stats = item.stats;
   }
 }
 
 class Consumables extends Item {
   constructor(item: item) {
-    super(item)
+    super(item);
   }
 
-  useItem(){
-    console.log("Using "+ this.getInfo().name)
+  useItem() {
+    console.log("Using " + this.getInfo().name);
   }
-
 }
 
-interface person {
+class Map extends Instance {
+  locations: location[];
+  constructor(map: map) {
+    const info = createInfo(map);
+    super(info, map);
+    this.locations = map.locations();
+  }
+  load() {
+    console.log("LOAD MAP");
+    this.createChoices(this.locations);
+    if (this.menu === undefined) {
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.info);
+    } else {
+      this.displayOptions(this.menu);
+    }
+  }
+}
+
+class Location extends Instance {
+  areas?: any[];
+  buildins?: building[];
+  constructor(location: location) {
+    const info = createInfo(location);
+    super(info, location);
+    this.areas = location.areas();
+    this.buildins = location.buildings();
+  }
+
+  load() {
+    console.log("LOAD LOCATION");
+    if (this.buildins) this.createChoices(this.buildins);
+    if (this.areas) this.createChoices(this.areas);
+    if (!this.menu) {
+      console.log(
+        "Could not generate menu please make sure object is valid. " + this.info
+      );
+      return;
+    } else {
+      this.displayOptions(this.menu);
+    }
+  }
+}
+
+class Area extends Instance {
+  buildings?: building[];
+  constructor(area: area) {
+    const info = createInfo(area);
+    super(info, area);
+    this.buildings = area.buildings();
+  }
+
+  load() {
+    console.log("LOAD AREA");
+    if (this.buildings) this.createChoices(this.buildings);
+    if (!this.menu) {
+      console.log(
+        "Could not generate menu please make sure object is valid. " + this.info
+      );
+      return;
+    } else {
+      this.displayOptions(this.menu);
+    }
+  }
+}
+
+class Building extends Instance {
+  room: room;
+  constructor(building: building) {
+    const info = createInfo(building);
+    super(info, building);
+    this.room = building.room();
+  }
+
+  load() {
+    console.log("LOAD BUILDING");
+    generateObj(this.room);
+  }
+}
+
+class Room extends Instance {
+  connectedAreas?: area[];
+  connectedRooms?: room[];
+  constructor(room: room) {
+    const info = createInfo(room);
+    super(info, room);
+    this.connectedRooms = room.connectedRooms();
+    this.connectedAreas = room.connectedAreas();
+  }
+  load() {
+    console.log("LOAD ROOM");
+    if (this.connectedRooms) this.createChoices(this.connectedRooms);
+    if (this.connectedAreas) this.createChoices(this.connectedAreas);
+
+    if (!this.menu) {
+      console.log(
+        "Could not generate menu please make sure object is valid. " + this.info
+      );
+      return;
+    } else {
+      this.displayOptions(this.menu);
+    }
+  }
+}
+
+export interface location {
   name: string;
   message: string;
-  age: number;
   class: string;
+  buildings: Function;
+  areas: Function;
+}
+export interface area {
+  name: string;
+  message: string;
+  class: string;
+  buildings: Function;
+}
+
+export interface building {
+  name: string;
+  message: string;
+  class: string;
+  room: Function;
+}
+export interface room {
+  name: string;
+  message: string;
+  class: string;
+  // items: Function;
+  // npcs: Function;
+  connectedAreas: Function;
+  connectedRooms: Function;
 }
 
 interface stats {
@@ -83,19 +315,12 @@ interface stats {
 }
 
 interface item {
+  class: string;
   name: string;
   description: string;
   message: string;
   stats: stats;
-  class: string;
 }
-
-const alex: person = {
-  class: "Person",
-  name: "alex",
-  message: "Talking to alex",
-  age: 23,
-};
 
 const potion: item = {
   class: "Consumables",
@@ -107,30 +332,29 @@ const potion: item = {
   },
 };
 
-function generateObj(obj: any): object {
-  switch (obj.class) {
-    case "Person":
-      return new Person(obj);
-    case "Consumables":
-      return new Consumables(obj);
-
-    default:
-      break;
-  }
-  return {
-    error: {
-      message:
-        "\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m",
-    },
-  };
+const InstanceMap: any  =  {
+  Menu: Menu,
+  Location: Location,
+  Area: Area,
+  Building: Building,
+  Room: Room,
+  Map: Map,
+  Consumables: Consumables
 }
 
-const myObj: any = generateObj(potion);
-
-if (myObj.error) {
-  console.error(myObj.error.message);
-} else {
-  console.log("Object created using the " + myObj.getClass() + " class");
-  console.log(myObj);
-  myObj.useItem()
+function generateObj(obj: any) {
+  const Instance = InstanceMap[obj.class];
+  if (!Instance) throw new Error(`\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m`);
+  const instance = new Instance(obj);
+  instance.load()
 }
+
+generateObj(worldMap);
+
+// if (myObj.error) {
+//   console.error(myObj.error.message);
+// } else {
+//   console.log("Object created using the " + myObj.getClass() + " class");
+//   console.log(myObj);
+//   myObj.useItem()
+// }

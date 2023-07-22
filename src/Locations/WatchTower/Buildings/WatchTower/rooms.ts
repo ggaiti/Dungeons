@@ -1,17 +1,18 @@
+import { room } from "../../../../Models/Master";
 import { watchTowerEntrance } from "../../Areas/watchTowerEntrance";
 
-export const firstFloor = {
-  class: "",
-  name: "",
-  message: "",
-  npcs: [],
+export const firstFloor: room = {
+  class: "Room",
+  name: "firstFloor",
+  message: "firstFloor",
+  // npcs: () => [],
   connectedAreas: () => [watchTowerEntrance],
   connectedRooms: () => [fFR1, fFR2, secondFloor],
-  interactables: [],
+  // interactables: [],
 };
 export const fFR1 = {
   class: "",
-  name: "",
+  name: "fFR1",
   message: "",
   npcs: [],
   connectedRooms: () => [firstFloor],
@@ -19,7 +20,7 @@ export const fFR1 = {
 };
 export const fFR2 = {
   class: "",
-  name: "",
+  name: "fFR2",
   message: "",
   npcs: [],
   connectedRooms: () => [firstFloor],
@@ -28,7 +29,7 @@ export const fFR2 = {
 export const secondFloor = {
   class: "",
   hidden: true,
-  name: "",
+  name: "secondFloor",
   message: "",
   npcs: [],
   connectedRooms: () => [firstFloor, sFR1, sFR2, sFR3, sFR4, thirdFloor],
