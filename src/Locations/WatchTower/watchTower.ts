@@ -1,6 +1,5 @@
 import { location } from "../../Models/Master";
 import { watchTowerEntrance } from "./Areas/watchTowerEntrance";
-import { watchTowerBuilding } from "./Buildings/WatchTower/watchTowerBuildings";
 
 //grand mage hide out, outside but close to helm
 export const watchTower: location = {
@@ -12,8 +11,8 @@ export const watchTower: location = {
   buildings: () => [],
   areas: () => [watchTowerEntrance],
   // interactables: () => [],
-  // preRequisites: () => {
-  //   //preRequisites
-  //   return true
-  // }
+  preRequisites: () => {
+    
+  }
 };
+

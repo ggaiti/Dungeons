@@ -1,7 +1,7 @@
 export const darkWoodsEntrance = {
-  class: "",
+  class: "Area",
   name: "Dark Woods Entrance",
-  message: "",
+  message: "Dark Woods Entrance",
   npc: [],
   // connectedAreas: [darkWoodsCenter],
   interactables: "",

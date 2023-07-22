@@ -1,9 +1,13 @@
+import { location } from "../../Models/Master";
+import { caveEntrance } from "./Areas/helmCaveAreas";
+
 //caves outside of helm
-export const helmCaves = {
-  class: "",
+export const helmCaves: location = {
+  class: "Location",
   name: "Helm Outer Caves",
-  message: "",
-  npcs: [],
-  // connectedAreas: [caveEntrance],
-  interactables: [],
+  message: "Helm Outer Caves",
+  // npcs: [],
+  areas: () => [caveEntrance],
+  buildings: () => []
+  // interactables: [],
 };

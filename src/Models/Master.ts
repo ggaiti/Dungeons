@@ -1,6 +1,8 @@
 import prompts from "prompts";
 import argv from "yargs";
 import { watchTower } from "../Locations/WatchTower/watchTower";
+import { helmCaves } from "../Locations/HelmCave/helmCave";
+import { innerCaveWest1 } from "../Locations/HelmCave/Areas/helmCaveAreas";
 prompts.override(argv);
 
 interface player {
@@ -93,10 +95,21 @@ abstract class Instance {
     console.log("CREATING CHOICES");
     if (!this.menu) this.menu = [];
     array?.forEach((obj) => {
-      this.menu?.push({
-        title: obj.name,
-        value: () => obj,
-      });
+      console.log(obj.preRequisites)
+      if(obj.preRequisites !== undefined) {
+        console.log("CHECKING PREREQUISITES")
+        if(obj.preRequisites()) {
+          this.menu?.push({
+            title: obj.name,
+            value: () => obj,
+          });
+        }
+      } else {
+        this.menu?.push({
+          title: obj.name,
+          value: () => obj,
+        });
+      }
     });
     this.menu.push({
       title: "Start Menu",
@@ -188,7 +201,7 @@ class Map extends Instance {
 }
 
 class Location extends Instance {
-  areas?: any[];
+  areas?: area[];
   buildins?: building[];
   constructor(location: location) {
     const info = createInfo(location);
@@ -214,15 +227,18 @@ class Location extends Instance {
 
 class Area extends Instance {
   buildings?: building[];
+  connectedAreas?: area[];
   constructor(area: area) {
     const info = createInfo(area);
     super(info, area);
     this.buildings = area.buildings();
+    this.buildings = area.connectedAreas();
   }
 
   load() {
     console.log("LOAD AREA");
     if (this.buildings) this.createChoices(this.buildings);
+    if (this.connectedAreas) this.createChoices(this.connectedAreas);
     if (!this.menu) {
       console.log(
         "Could not generate menu please make sure object is valid. " + this.info
@@ -279,12 +295,14 @@ export interface location {
   class: string;
   buildings: Function;
   areas: Function;
+  preRequisites?: Function;
 }
 export interface area {
   name: string;
   message: string;
   class: string;
   buildings: Function;
+  connectedAreas: Function;
 }
 
 export interface building {
@@ -349,7 +367,7 @@ function generateObj(obj: any) {
   instance.load()
 }
 
-generateObj(worldMap);
+generateObj(innerCaveWest1); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);

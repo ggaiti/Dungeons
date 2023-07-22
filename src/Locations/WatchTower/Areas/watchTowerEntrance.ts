@@ -6,6 +6,7 @@ export const watchTowerEntrance: area = {
   name: "Watch Tower Entrance",
   message: "Watch Tower Entrance",
   // npcs: [],
+  connectedAreas: () => [],
   buildings: () => [watchTowerBuilding],
   // interactables: [],
 };

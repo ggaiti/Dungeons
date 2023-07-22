@@ -10,13 +10,14 @@ export const firstFloor: room = {
   connectedRooms: () => [fFR1, fFR2, secondFloor],
   // interactables: [],
 };
-export const fFR1 = {
-  class: "",
+export const fFR1: room = {
+  class: "Room",
   name: "fFR1",
-  message: "",
-  npcs: [],
+  message: "fFR1",
+  // npcs: [],
   connectedRooms: () => [firstFloor],
-  interactables: [],
+  connectedAreas: () => []
+  // interactables: [],
 };
 export const fFR2 = {
   class: "",
@@ -28,7 +29,6 @@ export const fFR2 = {
 };
 export const secondFloor = {
   class: "",
-  hidden: true,
   name: "secondFloor",
   message: "",
   npcs: [],

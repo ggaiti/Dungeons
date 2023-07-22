@@ -1,25 +1,30 @@
-export const caveEntrance = {
-  class: "",
-  name: "",
-  message: "",
-  npcs: [],
-  safeZone: true,
-  // connectedAreas: [innerCave],
+import { area } from "../../../Models/Master";
+
+export const caveEntrance: area = {
+  class: "Area",
+  name: "caveEntrance",
+  message: "caveEntrance",
+  // npcs: [],
+  // safeZone: true,
+  connectedAreas: () => [innerCave],
+  buildings: () => []
   // interactables: [campFire],
 };
-export const innerCave = {
-  class: "",
-  name: "",
-  message: "",
-  // connectedAreas: [deepCave, innerCaveWest1],
-  interactables: [],
+export const innerCave: area = {
+  class: "Area",
+  name: "innerCave",
+  message: "innerCave",
+  connectedAreas: () => [deepCave, innerCaveWest1],
+  buildings: () => []
+  // interactables: [],
 };
-export const innerCaveWest1 = {
+export const innerCaveWest1: area = {
   class: "",
-  name: "",
-  message: "",
-  // connectedAreas: [innerCave, innerCaveWest2],
-  interactables: [],
+  name: "innerCaveWest1",
+  message: "innerCaveWest1",
+  connectedAreas: () =>[innerCave, innerCaveWest2],
+  buildings: () => []
+  // interactables: [],
 };
 export const innerCaveWest2 = {
   class: "",
