@@ -8,11 +8,7 @@ export const watchTower: location = {
   message: "Watch Tower Location",
   // npcs: () => [],
   // npmc: [archMage],
-  buildings: () => [],
-  areas: () => [watchTowerEntrance],
+  area: () => watchTowerEntrance,
   // interactables: () => [],
-  preRequisites: () => {
-    
-  }
+  preRequisites: () => {},
 };
-

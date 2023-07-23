@@ -7,7 +7,6 @@ export const helmCaves: location = {
   name: "Helm Outer Caves",
   message: "Helm Outer Caves",
   // npcs: [],
-  areas: () => [caveEntrance],
-  buildings: () => []
+  area: () => caveEntrance,
   // interactables: [],
 };

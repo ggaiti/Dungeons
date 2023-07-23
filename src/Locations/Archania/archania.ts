@@ -1,18 +1,22 @@
+import { location } from "../../Models/Master";
+
 //Second city
-export const archania = {
+export const archania: location = {
+  class: "Location",
   name: "Archania",
-  class: "",
-  // buildings: [
-  //   Tavern,
-  //   Inn,
-  //   palace,
-  //   shop,
-  //   blacksmith,
-  //   archMageAcademy,
-  //   warriorsGuild,
-  //   arkSecretSociety,
-  // ],
-  npcs: [],
-  // connectedAreas: [centralSquare, downtown, marketplace, backAlley],
-  interactables: [],
+  message: "Archania",
+  // Tavern,
+  // Inn,
+  // palace,
+  // shop,
+  // blacksmith,
+  // archMageAcademy,
+  // warriorsGuild,
+  // arkSecretSociety,
+
+  //   npcs: ()=>[],
+  area: () => "",
+  // centralSquare, downtown, marketplace, backAlley
+
+  //   interactables: [],
 };

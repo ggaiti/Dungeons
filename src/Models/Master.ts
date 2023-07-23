@@ -3,6 +3,7 @@ import argv from "yargs";
 import { watchTower } from "../Locations/WatchTower/watchTower";
 import { helmCaves } from "../Locations/HelmCave/helmCave";
 import { innerCaveWest1 } from "../Locations/HelmCave/Areas/helmCaveAreas";
+import { helmTown } from "../Locations/HelmTown/helmTown";
 prompts.override(argv);
 
 interface player {
@@ -95,10 +96,10 @@ abstract class Instance {
     console.log("CREATING CHOICES");
     if (!this.menu) this.menu = [];
     array?.forEach((obj) => {
-      console.log(obj.preRequisites)
-      if(obj.preRequisites !== undefined) {
-        console.log("CHECKING PREREQUISITES")
-        if(obj.preRequisites()) {
+      console.log(obj.preRequisites);
+      if (obj.preRequisites !== undefined) {
+        console.log("CHECKING PREREQUISITES");
+        if (obj.preRequisites()) {
           this.menu?.push({
             title: obj.name,
             value: () => obj,
@@ -111,10 +112,10 @@ abstract class Instance {
         });
       }
     });
-    this.menu.push({
-      title: "Start Menu",
-      value: () => startMenu,
-    });
+    // this.menu.push({
+    //   title: "Start Menu",
+    //   value: () => startMenu,
+    // });
     // console.log(this.menu)
   }
 
@@ -201,27 +202,16 @@ class Map extends Instance {
 }
 
 class Location extends Instance {
-  areas?: area[];
-  buildins?: building[];
+  area?: area;
   constructor(location: location) {
     const info = createInfo(location);
     super(info, location);
-    this.areas = location.areas();
-    this.buildins = location.buildings();
+    this.area = location.area();
   }
 
   load() {
     console.log("LOAD LOCATION");
-    if (this.buildins) this.createChoices(this.buildins);
-    if (this.areas) this.createChoices(this.areas);
-    if (!this.menu) {
-      console.log(
-        "Could not generate menu please make sure object is valid. " + this.info
-      );
-      return;
-    } else {
-      this.displayOptions(this.menu);
-    }
+    generateObj(this.area);
   }
 }
 
@@ -232,7 +222,7 @@ class Area extends Instance {
     const info = createInfo(area);
     super(info, area);
     this.buildings = area.buildings();
-    this.buildings = area.connectedAreas();
+    this.connectedAreas = area.connectedAreas();
   }
 
   load() {
@@ -293,8 +283,7 @@ export interface location {
   name: string;
   message: string;
   class: string;
-  buildings: Function;
-  areas: Function;
+  area: Function;
   preRequisites?: Function;
 }
 export interface area {
@@ -350,24 +339,28 @@ const potion: item = {
   },
 };
 
-const InstanceMap: any  =  {
+const InstanceMap: any = {
   Menu: Menu,
   Location: Location,
   Area: Area,
   Building: Building,
   Room: Room,
   Map: Map,
-  Consumables: Consumables
-}
+  Consumables: Consumables,
+};
 
 function generateObj(obj: any) {
   const Instance = InstanceMap[obj.class];
-  if (!Instance) throw new Error(`\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m`);
+  console.log(obj);
+  if (!Instance)
+    throw new Error(
+      `\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m`
+    );
   const instance = new Instance(obj);
-  instance.load()
+  instance.load();
 }
 
-generateObj(innerCaveWest1); ///test objects
+generateObj(helmTown); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);

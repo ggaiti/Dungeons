@@ -1,8 +1,12 @@
-export const helmTownShop = {
-  class: "",
+import { building } from "../../../../Models/Master";
+import { mainRoom } from "./rooms";
+
+export const helmTownShop: building = {
+  class: "Building",
   name: "Helm Town General Goods",
-  message: "Welcome to the shop, Please have a look around",
+  message: "Helm Town General Goods",
+  room: () => mainRoom,
+  //   areas: ()=> [],
   // npcs: [shopkeeper],
-  connectedAreas: [],
   // interactables: [buy, sell, talk, quest],
 };
