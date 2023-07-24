@@ -4,6 +4,8 @@ import { watchTower } from "../Locations/WatchTower/watchTower";
 import { helmCaves } from "../Locations/HelmCave/helmCave";
 import { helmTown } from "../Locations/HelmTown/helmTown";
 import { darkWoods } from "../Locations/DarkWoods/darkwoods";
+import fs from "fs";
+const file_descriptor = fs.openSync("Master.ts", "r");
 prompts.override(argv);
 
 interface player {
@@ -111,11 +113,11 @@ abstract class Instance {
         });
       }
     });
-    // this.menu.push({
-    //   title: "Start Menu",
-    //   value: () => startMenu,
-    // });
-    // console.log(this.menu)
+    this.menu.push({
+      title: "close game",
+      value: () => closeGame(),
+    });
+    console.log(this.menu)
   }
 
   async displayOptions(choices: choice[], updateLocation?: boolean) {
@@ -360,7 +362,16 @@ function generateObj(obj: any) {
   instance.load();
 }
 
-generateObj(watchTower); ///test objects
+export const closeGame = () => {
+  fs.close(file_descriptor, (err) => {
+    if (err) console.error("Failed to close game", err);
+    else {
+      console.log("\n> Game closed");
+    }
+  });
+};
+
+generateObj(darkWoods); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);
