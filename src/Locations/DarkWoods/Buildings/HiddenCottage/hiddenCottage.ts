@@ -1,7 +1,7 @@
 export const hiddenCottage = {
   class: "",
   name: "Hidden Cottage",
-  message: "",
+  message: "Hidden Cottage",
   //   npc: [dryad],
   //   connectedAreas: [deepGrotto],
   room: [],
