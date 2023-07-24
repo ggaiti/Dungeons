@@ -13,7 +13,7 @@ interface player {
 
 let PLAYER: player = {
   name: "ALEX",
-  location: () => {},
+  location: () => null,
 };
 
 interface intanceInfo {
@@ -83,9 +83,8 @@ abstract class Instance {
     return this.info.class;
   }
 
-  updatePlayer() {
+  updatePlayerLocation() {
     PLAYER.location = () => this.currentObj;
-    console.log(this);
     console.log(PLAYER.location());
   }
 
@@ -119,18 +118,23 @@ abstract class Instance {
     // console.log(this.menu)
   }
 
-  async displayOptions(choices: choice[]) {
-    const response = await prompts([
-      {
-        type: "select",
-        name: "choice",
-        message: this.info.message,
-        choices: choices,
-      },
-    ]);
-    this.updatePlayer();
+  async displayOptions(choices: choice[], updateLocation?: boolean) {
+    console.log(choices);
+    const response = await prompts(
+      [
+        {
+          type: "select",
+          name: "choice",
+          message: this.info.message,
+          choices: choices,
+        },
+      ]
+    );
+    if (updateLocation) this.updatePlayerLocation();
     console.log("CHOICE");
-    generateObj(response.choice());
+    console.log(response.choice);
+    if (response.choice) return generateObj(response.choice());
+    return generateObj(startMenu);
   }
 }
 
@@ -194,7 +198,7 @@ class Map extends Instance {
     this.createChoices(this.locations);
     if (this.menu === undefined) {
       console.log("Could not generate menu please make sure object is valid: ");
-      console.log(this.info);
+      console.log(this.currentObj);
     } else {
       this.displayOptions(this.menu);
     }
@@ -230,12 +234,11 @@ class Area extends Instance {
     if (this.buildings) this.createChoices(this.buildings);
     if (this.connectedAreas) this.createChoices(this.connectedAreas);
     if (!this.menu) {
-      console.log(
-        "Could not generate menu please make sure object is valid. " + this.info
-      );
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.currentObj);
       return;
     } else {
-      this.displayOptions(this.menu);
+      this.displayOptions(this.menu, true);
     }
   }
 }
@@ -269,12 +272,10 @@ class Room extends Instance {
     if (this.connectedAreas) this.createChoices(this.connectedAreas);
 
     if (!this.menu) {
-      console.log(
-        "Could not generate menu please make sure object is valid. " + this.info
-      );
-      return;
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.currentObj);
     } else {
-      this.displayOptions(this.menu);
+      this.displayOptions(this.menu, true);
     }
   }
 }
@@ -351,7 +352,6 @@ const InstanceMap: any = {
 
 function generateObj(obj: any) {
   const Instance = InstanceMap[obj.class];
-  console.log(obj);
   if (!Instance)
     throw new Error(
       `\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m`
@@ -360,7 +360,7 @@ function generateObj(obj: any) {
   instance.load();
 }
 
-generateObj(darkWoods); ///test objects
+generateObj(watchTower); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);
