@@ -360,7 +360,7 @@ function generateObj(obj: any) {
   instance.load();
 }
 
-generateObj(darkWoods); ///test objects
+generateObj(helmCaves); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);
