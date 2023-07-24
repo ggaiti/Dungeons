@@ -4,6 +4,8 @@ import { watchTower } from "../Locations/WatchTower/watchTower";
 import { helmCaves } from "../Locations/HelmCave/helmCave";
 import { helmTown } from "../Locations/HelmTown/helmTown";
 import { darkWoods } from "../Locations/DarkWoods/darkwoods";
+import fs from "fs";
+const file_descriptor = fs.openSync("Master.ts", "r");
 prompts.override(argv);
 
 interface player {
@@ -13,7 +15,7 @@ interface player {
 
 let PLAYER: player = {
   name: "ALEX",
-  location: () => {},
+  location: () => null,
 };
 
 interface intanceInfo {
@@ -83,9 +85,8 @@ abstract class Instance {
     return this.info.class;
   }
 
-  updatePlayer() {
+  updatePlayerLocation() {
     PLAYER.location = () => this.currentObj;
-    console.log(this);
     console.log(PLAYER.location());
   }
 
@@ -112,25 +113,30 @@ abstract class Instance {
         });
       }
     });
-    // this.menu.push({
-    //   title: "Start Menu",
-    //   value: () => startMenu,
-    // });
-    // console.log(this.menu)
+    this.menu.push({
+      title: "close game",
+      value: () => closeGame(),
+    });
+    console.log(this.menu)
   }
 
-  async displayOptions(choices: choice[]) {
-    const response = await prompts([
-      {
-        type: "select",
-        name: "choice",
-        message: this.info.message,
-        choices: choices,
-      },
-    ]);
-    this.updatePlayer();
+  async displayOptions(choices: choice[], updateLocation?: boolean) {
+    console.log(choices);
+    const response = await prompts(
+      [
+        {
+          type: "select",
+          name: "choice",
+          message: this.info.message,
+          choices: choices,
+        },
+      ]
+    );
+    if (updateLocation) this.updatePlayerLocation();
     console.log("CHOICE");
-    generateObj(response.choice());
+    console.log(response.choice);
+    if (response.choice) return generateObj(response.choice());
+    return generateObj(startMenu);
   }
 }
 
@@ -194,7 +200,7 @@ class Map extends Instance {
     this.createChoices(this.locations);
     if (this.menu === undefined) {
       console.log("Could not generate menu please make sure object is valid: ");
-      console.log(this.info);
+      console.log(this.currentObj);
     } else {
       this.displayOptions(this.menu);
     }
@@ -230,12 +236,11 @@ class Area extends Instance {
     if (this.buildings) this.createChoices(this.buildings);
     if (this.connectedAreas) this.createChoices(this.connectedAreas);
     if (!this.menu) {
-      console.log(
-        "Could not generate menu please make sure object is valid. " + this.info
-      );
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.currentObj);
       return;
     } else {
-      this.displayOptions(this.menu);
+      this.displayOptions(this.menu, true);
     }
   }
 }
@@ -269,12 +274,10 @@ class Room extends Instance {
     if (this.connectedAreas) this.createChoices(this.connectedAreas);
 
     if (!this.menu) {
-      console.log(
-        "Could not generate menu please make sure object is valid. " + this.info
-      );
-      return;
+      console.log("Could not generate menu please make sure object is valid: ");
+      console.log(this.currentObj);
     } else {
-      this.displayOptions(this.menu);
+      this.displayOptions(this.menu, true);
     }
   }
 }
@@ -351,7 +354,6 @@ const InstanceMap: any = {
 
 function generateObj(obj: any) {
   const Instance = InstanceMap[obj.class];
-  console.log(obj);
   if (!Instance)
     throw new Error(
       `\u001b[33m Could not generate object please make sure your object has a class property associated with it! If the object has no class associated with it\u001b[31m DO NOT\u001b[33m use the generateObj() funtion. \u001b[0m`
@@ -360,7 +362,20 @@ function generateObj(obj: any) {
   instance.load();
 }
 
+<<<<<<< HEAD
 generateObj(helmCaves); ///test objects
+=======
+export const closeGame = () => {
+  fs.close(file_descriptor, (err) => {
+    if (err) console.error("Failed to close game", err);
+    else {
+      console.log("\n> Game closed");
+    }
+  });
+};
+
+generateObj(darkWoods); ///test objects
+>>>>>>> 8763f9e0a98e886a781b03bf816f72e6e4b555cf
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);
