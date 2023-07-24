@@ -2,8 +2,8 @@ import prompts from "prompts";
 import argv from "yargs";
 import { watchTower } from "../Locations/WatchTower/watchTower";
 import { helmCaves } from "../Locations/HelmCave/helmCave";
-import { innerCaveWest1 } from "../Locations/HelmCave/Areas/helmCaveAreas";
 import { helmTown } from "../Locations/HelmTown/helmTown";
+import { darkWoods } from "../Locations/DarkWoods/darkwoods";
 prompts.override(argv);
 
 interface player {
@@ -360,7 +360,7 @@ function generateObj(obj: any) {
   instance.load();
 }
 
-generateObj(helmTown); ///test objects
+generateObj(darkWoods); ///test objects
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);

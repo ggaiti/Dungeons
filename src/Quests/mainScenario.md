@@ -10,9 +10,10 @@ switch (progress) {
 
 talk to alex, he is one of the npcs in the tavern, he will tell you the town is in trouble becaues a nearby goblin camp was established in the forest, you have the option to help out. if you do you progress the story. he gives you your main quest
 
-_Take care of the goblin Problem_
+console.log("_Take care of the goblin Problem_")
 
 Kill the goblin leader in the dark woods to continue the story
+return progress === 1
 
         break;
 
