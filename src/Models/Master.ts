@@ -8,13 +8,15 @@ import fs from "fs";
 const file_descriptor = fs.openSync("Master.ts", "r");
 prompts.override(argv);
 
-interface player {
+export interface player {
   name: string;
+  quest: Function;
   location: Function;
 }
 
 let PLAYER: player = {
   name: "ALEX",
+  quest: () => [],
   location: () => null,
 };
 
@@ -117,21 +119,19 @@ abstract class Instance {
       title: "close game",
       value: () => closeGame(),
     });
-    console.log(this.menu)
+    console.log(this.menu);
   }
 
   async displayOptions(choices: choice[], updateLocation?: boolean) {
     console.log(choices);
-    const response = await prompts(
-      [
-        {
-          type: "select",
-          name: "choice",
-          message: this.info.message,
-          choices: choices,
-        },
-      ]
-    );
+    const response = await prompts([
+      {
+        type: "select",
+        name: "choice",
+        message: this.info.message,
+        choices: choices,
+      },
+    ]);
     if (updateLocation) this.updatePlayerLocation();
     console.log("CHOICE");
     console.log(response.choice);
@@ -362,9 +362,6 @@ function generateObj(obj: any) {
   instance.load();
 }
 
-<<<<<<< HEAD
-generateObj(helmCaves); ///test objects
-=======
 export const closeGame = () => {
   fs.close(file_descriptor, (err) => {
     if (err) console.error("Failed to close game", err);
@@ -375,7 +372,6 @@ export const closeGame = () => {
 };
 
 generateObj(darkWoods); ///test objects
->>>>>>> 8763f9e0a98e886a781b03bf816f72e6e4b555cf
 
 // if (myObj.error) {
 //   console.error(myObj.error.message);

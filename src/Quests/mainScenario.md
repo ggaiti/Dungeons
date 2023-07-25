@@ -14,8 +14,8 @@ console.log("_Take care of the goblin Problem_")
 
 Kill the goblin leader in the dark woods to continue the story
 return progress === 1
-
-        break;
+}
+switch (progress) {
 
     case 1:
 
@@ -26,7 +26,7 @@ go into the hidden grove where the hidden cottage is and you have to talk to the
 she will give you the next quest to progress the story.
 
 _go to the caves and figure out what is lurking about_
-
+}
 fight the curse druid and defeat him to continue your quest, he will give you the third quest to progress the story.
 
          break;
