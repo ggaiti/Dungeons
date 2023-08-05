@@ -3,90 +3,181 @@ import argv from "yargs";
 
 interface player {
   name: string;
-  quest: object[];
+  quest: quest[];
+}
+interface quest {
+  id: number;
+  name: string;
+  progress: number;
+  completed: boolean;
+  story: Function;
+}
+interface choice {
+  title: string; //choice text
+  value: number;
 }
 
+const generatePrompt = async (choices: choice[], message: string) => {
+  console.log(choices);
+  const response = await prompts([
+    {
+      type: "select",
+      name: "choice",
+      message: message,
+      choices: choices,
+    },
+  ]);
+  console.log("CHOICE");
+  console.log(response.choice);
+  return response.choice;
+};
+
 const quest1 = {
+  id: 1,
   name: "example quest",
   progress: 0,
-  story: (progress: Number) => exampleStory(progress),
+  completed: false,
+  story: async (progress: Number) => await exampleStory(progress),
 };
 const exampleStory = async (progress: Number) => {
+  let choices: choice[];
+  let response;
+
   switch (progress) {
     case 0:
-      const response = await prompts([
+      choices = [
         {
-          type: "select",
-          name: "choice",
-          message: "do you want this quest?",
-          choices: [
-            {
-              title: "yes",
-              value: 0,
-            },
-            {
-              title: "no",
-              value: 1,
-            },
-          ],
+          title: "yes",
+          value: 0,
         },
-      ]);
-      console.log(response.choice);
-      if (response.choice === 0) {
-        pushQuest(player, quest1);
+        {
+          title: "no",
+          value: 1,
+        },
+      ];
+      response = await generatePrompt(choices, "do you want this quest?");
+      if (response === 0) {
+        pushQuest(quest1);
         updateCurrentQuest(quest1);
+        // questComplete(quest1);
+        console.log(player);
       } else {
         console.log("come back later");
       }
       break;
-    default:
+    case 1:
+      choices = [
+        {
+          title: "yes",
+          value: 0,
+        },
+        {
+          title: "no",
+          value: 1,
+        },
+      ];
+      response = await generatePrompt(
+        choices,
+        "do you want to continue the quest"
+      );
+      console.log(response);
+      if (response === 0) {
+        updateCurrentQuest(quest1);
+        // questComplete(quest1);
+        console.log(player);
+      } else {
+        console.log("come back later");
+      }
+      break;
+    case 2:
+      choices = [
+        {
+          title: "yes",
+          value: 0,
+        },
+        {
+          title: "no",
+          value: 1,
+        },
+      ];
+      response = await generatePrompt(
+        choices,
+        "do you want to finish the quest?"
+      );
+      console.log(response);
+      if (response === 0) {
+        updateCurrentQuest(quest1);
+        questComplete(quest1);
+        console.log(player);
+      } else {
+        console.log("come back later");
+      }
       break;
   }
-  //   console.log(player);
 };
 let player: player = {
   name: "ALEX",
-  quest: [],
+  quest: [quest1],
 };
-const pushQuest = (player: Object, quest: Object) => {
+
+const pushQuest = (quest: quest) => {
   let questCopy = {
     ...quest,
-    name: { ...quest.name },
-    progress: { ...quest.progress },
-    story: { ...quest.story },
   };
   let playerCopy = { ...player, quest: [...player.quest] };
-  if (player.quest === true) {
-    return player;
-  } else {
+  if (playerCopy.quest.length === 0) {
     playerCopy.quest.push(questCopy);
+  } else {
+    for (let i = 0; i < playerCopy.quest.length; i++) {
+      if (playerCopy.quest[i].id === questCopy.id) {
+        return player;
+      } else {
+        playerCopy.quest.push(questCopy);
+      }
+    }
   }
   player = playerCopy;
-  quest = questCopy;
-  console.log(player);
+  // console.log(player);
 };
-
-//function that does both functions
-const updateCurrentQuest = (quest) => {
-  let copyQuest = { ...quest, questProgress: { ...quest.progress } };
-  copyQuest.progress += 1;
-  quest = copyQuest;
-};
-
-const questComplete = (quest) => {
-  let questCopy = {
-    ...quest,
-    name: { ...quest.name },
-    progress: { ...quest.progress },
-  };
-  if (quest.progress > exampleStory.progress) {
-    quest.progress += 1;
-  } else {
-    console.log("quest complete");
+const updateCurrentQuest = (quest: quest) => {
+  let playerCopy = { ...player, quest: [...player.quest] };
+  for (let i = 0; i < playerCopy.quest.length; i++) {
+    if (playerCopy.quest[i].id === quest.id) {
+      let questCopy = { ...playerCopy.quest[i] };
+      questCopy.progress += 1;
+      playerCopy.quest[i] = questCopy;
+      return (player = playerCopy);
+    }
   }
-  quest = questCopy;
 };
 
-// pushQuest();
-quest1.story(0);
-//update quest,
+const questComplete = (quest: quest) => {
+  let playerCopy = { ...player, quest: [...player.quest] };
+  for (let i = 0; i < playerCopy.quest.length; i++) {
+    if (playerCopy.quest[i].id === quest.id) {
+      let questCopy = { ...playerCopy.quest[i] };
+      questCopy.completed = true;
+      playerCopy.quest[i] = questCopy;
+      return (player = playerCopy);
+    }
+  }
+};
+const getQuest = (quest: quest) => {
+  for (let i = 0; i < player.quest.length; i++) {
+    if (player.quest[i].id === quest.id) {
+      return player.quest[i];
+    }
+  }
+};
+const test = async () => {
+  for (let i = 0; i < 4; i++) {
+    if (i === 0) {
+      await quest1.story(0);
+    }
+    if (i !== 0) {
+      const playerQuest = getQuest(quest1);
+      await playerQuest?.story(playerQuest.progress);
+    }
+  }
+};
+test();
